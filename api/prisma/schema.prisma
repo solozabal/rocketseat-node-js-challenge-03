@@ -1,0 +1,59 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Org {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  whatsapp  String
+  address   String   // armazenar JSON serializado ou endereço simples
+  pets      Pet[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("orgs")
+}
+
+model Pet {
+  id            String   @id @default(uuid())
+  name          String
+  description   String?
+  species       String   @default("dog")
+  age           Int?
+  size          String?  // "small" | "medium" | "large"
+  energy_level  String?  // "low" | "medium" | "high"
+  independence  String?  // "low" | "medium" | "high"
+  environment   String?  // "apartment" | "house" | "both"
+  adopted       Boolean  @default(false)
+
+  orgId         String
+  org           Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  photos        Photo[]  // relação 1:N para URLs de foto
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("pets")
+  @@index([orgId])
+  @@index([species])
+  @@index([size])
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  url       String
+  petId     String
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@map("photos")
+  @@index([petId])
+}
