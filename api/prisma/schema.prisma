@@ -13,11 +13,11 @@ model Org {
   email     String   @unique
   password  String
   whatsapp  String
-  address   String   // armazenar JSON serializado ou endereço simples
+  address   String   // JSON string: { street, number, city, state, zip? }
   pets      Pet[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
+  
   @@map("orgs")
 }
 
@@ -32,19 +32,20 @@ model Pet {
   independence  String?  // "low" | "medium" | "high"
   environment   String?  // "apartment" | "house" | "both"
   adopted       Boolean  @default(false)
-
+  
   orgId         String
   org           Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
-
-  photos        Photo[]  // relação 1:N para URLs de foto
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
+  
+  photos        Photo[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
   @@map("pets")
   @@index([orgId])
   @@index([species])
   @@index([size])
+  @@index([createdAt])
 }
 
 model Photo {
@@ -53,7 +54,7 @@ model Photo {
   petId     String
   pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-
+  
   @@map("photos")
   @@index([petId])
 }

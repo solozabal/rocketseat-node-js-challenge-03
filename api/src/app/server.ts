@@ -6,6 +6,7 @@ import { prisma } from '../lib/prisma';
 
 // modules
 import { orgRoutes } from '../modules/orgs/routes';
+import { petsRoutes } from '../modules/pets/pets.routes'; 
 import authenticatePlugin from '../plugins/authenticate';
 
 dotenv.config();
@@ -23,6 +24,7 @@ export async function buildServer() {
 
   // register business routes
   await app.register(orgRoutes, { prefix: '' });
+  await app.register(petsRoutes, { prefix: '' });
 
   // health route
   app.get('/health', async () => ({ status: 'ok' }));
