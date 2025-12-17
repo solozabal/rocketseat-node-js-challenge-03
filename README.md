@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT" />
   <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
   <img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest" />
-  <img src="https://img.shields.io/badge/Zod-3E256F?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB3aWR0aD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTU0uNSAyMmguN3YtLjdoLS43djB6bTEuNSAwaC0uN3YtLjdoLjR2LjdoLjN6bS4xNy0uN2guM3YtLjdoLjR2LjdoLjN6bTItLjcyaC43di0uN2gtLjd2Ljd6bS0xLjU5LTEuNDhoLjR2LS43aC0uN3YwYy4wMTkuMTEyLjExLjE5OC4yMi4xOThoLjA4di0uM2gtLjZ6bTEuOTc5LTEuNDhoLjR2LS43aC0uN3YwYy4wMTkuMTEyLjExLjE5OC4yMi4xOThoLjA4di0uM2gtLjZ6bS0zLjg0IDAuNnYtLjdoLjR2LjdoLS40em0xLS43di0uN2guN3YwYy4wMTkuMTEyLjExLjE5OC4yMi4xOThoLjA4di0uM2gtLjZ6bTEuOTYyLTEuNDhoLjR2LS43aC0uN3YwYy4wMTkuMTEyLjExLjE5OC4yMi4xOThoLjA4di0uM2gtLjZ6bS05LjY3LTVoMTh2LTJINi41NHYtM0gxOHYtMkg2LjU0VjMuNjlIMThWNkg2LjU0di0xaC0ydi0xLjMyaC0ydi0xLjMyTDYuNTQgMi42OUgydjJIMTguNDZMMTguNTUgMTZzLjAxLjEyLS4wOCAuMTRjLS4wOS4wMi0uMTYuMDQtLjE2LjE0bC4wMS4wMUgyVjE4SDYuNTR2Mi4wMkgydi0yLjdIOC41NHoiLz48L3N2Zz4=&logoColor=white" alt="Zod" />
+  <img src="https://img.shields.io/badge/Zod-3E256F?style=for-the-badge&logoColor=white" alt="Zod" />
   <img src="https://img.shields.io/badge/BcryptJS-5293C2?style=for-the-badge&logoColor=white" alt="bcryptjs" />
 </p>
 
