@@ -1,21 +1,39 @@
+// api/src/modules/pets/pets.test.ts
 import { beforeAll, afterAll, describe, it, expect } from 'vitest';
 import { buildServer } from '../../app/server';
 import { prisma } from '../../lib/prisma';
 
-let app: any;
+let app: Awaited<ReturnType<typeof buildServer>>;
 let tokenOwner: string;
 let tokenOther: string;
 let ownerOrgId: string;
 let createdPetId: string;
 
+// helper: clear DB atomically with retry to handle SQLite locks
+async function clearDb(retries = 3): Promise<void> {
+  try {
+    await prisma.$transaction([
+      prisma.photo.deleteMany(),
+      prisma.pet.deleteMany(),
+      prisma.org.deleteMany(),
+    ]);
+  } catch (err) {
+    if (retries > 0) {
+      // small backoff and retry
+      await new Promise((r) => setTimeout(r, 100));
+      return clearDb(retries - 1);
+    }
+    // rethrow for permanent cases
+    throw err;
+  }
+}
+
 beforeAll(async () => {
   app = await buildServer();
   await app.ready();
 
-  // clear DB
-  await prisma.photo.deleteMany();
-  await prisma.pet.deleteMany();
-  await prisma.org.deleteMany();
+  // clear DB atomically
+  await clearDb();
 
   // create owner org
   const res1 = await app.inject({

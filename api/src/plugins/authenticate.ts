@@ -1,22 +1,47 @@
+// api/src/plugins/authenticate.ts
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
 import { verifyJwt } from '../lib/jwt';
 
-const authenticate: FastifyPluginAsync = async (fastify) => {
-  // add hook: parse token if present and attach to request.org
-  fastify.addHook('preHandler', async (request, reply) => {
-    const header = request.headers.authorization;
-    if (!header) return;
+const authenticatePlugin: FastifyPluginAsync = async (fastify) => {
+  fastify.decorateRequest('org', undefined);
 
-    const token = header.replace(/^Bearer\s+/i, '');
+  fastify.decorate('authenticate', async (request: any, reply: any) => {
     try {
-      const payload = verifyJwt(token);
-      request.org = { orgId: (payload as any).orgId, email: (payload as any).email };
-    } catch (err) {
-      // if token invalid, do not throw here; let route decide or throw 401 if route requires auth
-      request.org = undefined;
+      const auth = request.headers.authorization;
+
+      if (!auth) {
+        return reply.status(401).send({ message: 'Missing Authorization header' });
+      }
+
+      const token = auth.replace(/^Bearer\s+/i, '').trim();
+
+      if (!token) {
+        return reply.status(401).send({ message: 'Invalid token format' });
+      }
+
+      const payload = await Promise.resolve(verifyJwt(token)) as any;
+
+      if (!payload || typeof payload !== 'object') {
+        return reply.status(401).send({ message: 'Invalid token payload' });
+      }
+
+      const orgId = payload.orgId ?? payload.id;
+      const email = payload.email;
+
+      if (!orgId) {
+        return reply.status(401).send({ message: 'Missing orgId in token' });
+      }
+
+      request.org = { orgId, email };
+      return;
+
+    } catch (error: any) {
+      return reply.status(401).send({
+        message: `Token error: ${error?.message ?? 'invalid token'}`,
+      });
     }
   });
 };
 
-export default fp(authenticate);
+export default fp(authenticatePlugin);

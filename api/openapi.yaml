@@ -1,0 +1,49 @@
+# api/openapi.yaml (minimal)
+openapi: 3.0.1
+info:
+  title: FindAFriend API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3333
+paths:
+  /orgs:
+    post:
+      summary: Register org
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrgCreate'
+      responses:
+        '201':
+          description: Created
+  /sessions:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionRequest'
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    OrgCreate:
+      type: object
+      properties:
+        name: { type: string }
+        email: { type: string }
+        password: { type: string }
+        whatsapp: { type: string }
+        address: { type: object }
+      required: [name, email, password]
+    SessionRequest:
+      type: object
+      properties:
+        email: { type: string }
+        password: { type: string }
+      required: [email, password]
