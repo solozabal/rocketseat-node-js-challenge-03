@@ -4,13 +4,30 @@ import { prisma } from '../../lib/prisma';
 
 let app: any;
 
+// helper: limpar DB de forma atômica com retry para lidar com locks do SQLite
+async function clearDb(retries = 3) {
+  try {
+    await prisma.$transaction([
+      prisma.photo.deleteMany(),
+      prisma.pet.deleteMany(),
+      prisma.org.deleteMany(),
+    ]);
+  } catch (err) {
+    if (retries > 0) {
+      // pequeno backoff e tenta de novo
+      await new Promise((r) => setTimeout(r, 100));
+      return clearDb(retries - 1);
+    }
+    // rethrow para casos permanentes
+    throw err;
+  }
+}
+
 beforeAll(async () => {
   app = await buildServer();
   await app.ready();
-  // clear DB
-  await prisma.photo.deleteMany();
-  await prisma.pet.deleteMany();
-  await prisma.org.deleteMany();
+  // clear DB atomically (with retry)
+  await clearDb();
 });
 
 afterAll(async () => {
